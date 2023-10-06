@@ -1,33 +1,36 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// import Router from "./components/Router";
+// import NavBar from "./components/bars/Navbar";
+// import FooterBar from "./components/bars/FooterBar";
+// import { useState } from 'react'
+import { useSelector } from "react-redux";
+import NameForm from "./NameForm";
+// import Buttons from "./Buttons";
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  // const [loggedIn, setLoggedIn] = useState(false);
+  // const [changesHappened, setChangesHappened] = useState(false);
+  // const count = useSelector((state)=> state.counter.count);
+  const username = useSelector((state) => state.userName.name);
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+    <h1>Welcome {username}</h1>
+    <NameForm />
+      {/* <NavBar
+        loggedIn={loggedIn}
+        setLoggedIn={setLoggedIn}
+        changesHappened={changesHappened}
+        setChangesHappened={setChangesHappened}
+      />
+      <section id="pageSection">
+        <Router
+          loggedIn={loggedIn}
+          setLoggedIn={setLoggedIn}
+          changesHappened={changesHappened}
+          setChangesHappened={setChangesHappened}
+        />
+      </section>
+      <FooterBar /> */}
     </>
   )
 }
