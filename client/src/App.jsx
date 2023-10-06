@@ -4,7 +4,8 @@
 // import { useState } from 'react'
 import { useSelector } from "react-redux";
 import NameForm from "./NameForm";
-// import Buttons from "./Buttons";
+import Router from "./components/Router";
+// import axios from "axios";
 
 const App = () => {
   // const [loggedIn, setLoggedIn] = useState(false);
@@ -16,6 +17,7 @@ const App = () => {
     <>
     <h1>Welcome {username}</h1>
     <NameForm />
+    <Router />
       {/* <NavBar
         loggedIn={loggedIn}
         setLoggedIn={setLoggedIn}
