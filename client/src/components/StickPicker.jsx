@@ -1,6 +1,6 @@
 import pickerbanner from "./images/pickerbanner.png";
 
-const Profile = () => {
+const StickPicker = () => {
   return (
     <>
       <img
@@ -8,9 +8,9 @@ const Profile = () => {
         alt="Picker Banner"
         style={{ width: "350px", height: "auto" }}
       />
-      <h1>Profile Page</h1>
+      <h1>Stick Picker Page</h1>
     </>
   );
 };
 
-export default Profile;
+export default StickPicker;
