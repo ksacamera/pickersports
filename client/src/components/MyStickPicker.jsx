@@ -1,6 +1,6 @@
 import pickerbanner from "./images/pickerbanner.png";
 
-const StickPicker = () => {
+const MyStickPicker = () => {
   return (
     <>
       <img
@@ -13,4 +13,4 @@ const StickPicker = () => {
   );
 };
 
-export default StickPicker;
+export default MyStickPicker;
