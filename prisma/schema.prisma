@@ -10,7 +10,80 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Brands {
-
+// Brands table
+model Brand {
+  BrandID   Int     @id @default(autoincrement())
+  BrandName String
+  avatar    String  @db.Text @default("")
+  models    Model[] // One-to-many relationship with Stick Models
 }
 
+// Texture table
+model Texture {
+  TextureID   Int       @id @default(autoincrement())
+  TextureName String
+  variants    Variant[] // One-to-many relationship with Stick Model Variants
+}
+
+// Hand table
+model Hand {
+  HandID   Int       @id @default(autoincrement())
+  HandName String
+  variants Variant[] // One-to-many relationship with Stick Model Variants
+}
+
+// Kick Points table
+model KickPoint {
+  KickPointID   Int     @id @default(autoincrement())
+  KickPointName String
+  models        Model[] // One-to-many relationship with Stick Models
+}
+
+// Flex table
+model Flex {
+  FlexID    Int       @id @default(autoincrement())
+  FlexValue Int
+  variants  Variant[] // One-to-many relationship with Stick Model Variants
+}
+
+// Blade Curves table
+model BladeCurve {
+  BladeCurveID   Int       @id @default(autoincrement())
+  BladeCurveName String
+  variants       Variant[] // One-to-many relationship with Stick Model Variants
+}
+
+// Stick Models table
+model Model {
+  ModelID     Int       @id @default(autoincrement())
+  ModelName   String
+  Brand       Brand     @relation(fields: [BrandID], references: [BrandID])
+  BrandID     Int
+  KickPoint   KickPoint @relation(fields: [KickPointID], references: [KickPointID])
+  KickPointID Int
+  variants    Variant[] // One-to-many relationship with Stick Model Variants
+}
+
+// Stick Model Variants table
+model Variant {
+  ModelVariantID Int        @id @default(autoincrement())
+  Model          Model      @relation(fields: [ModelID], references: [ModelID])
+  ModelID        Int
+  Flex           Flex       @relation(fields: [FlexID], references: [FlexID])
+  FlexID         Int
+  Hand           Hand       @relation(fields: [HandID], references: [HandID])
+  HandID         Int
+  BladeCurve     BladeCurve @relation(fields: [BladeCurveID], references: [BladeCurveID])
+  BladeCurveID   Int
+  Texture        Texture    @relation(fields: [TextureID], references: [TextureID])
+  TextureID      Int
+}
+
+model User {
+  id       Int     @id @default(autoincrement())
+  email    String  @unique @db.VarChar(255)
+  username String  @unique @db.VarChar(255)
+  password String  @db.VarChar(255)
+  isAdmin  Boolean @default(false) @db.Boolean
+  avatar   String  @db.Text
+}

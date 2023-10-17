@@ -35,6 +35,13 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, "..", "client/dist/index.html"));
 });
 
+app.get('/hockey', (req, res) => {
+  res.send('Hockey');
+})
+
+const brandsRouter = require("./api/hockey/brands");
+app.use(`/api/hockey/brands`, brandsRouter);
+
 app.use(`/api`, require(`./api`));
 app.use(`/auth`, require(`./auth`));
 

@@ -1,11 +1,12 @@
 const router = require("express").Router();
+const express = require('express')
 
 router.get(`/`, (req, res) => {
   res.send(`Welcome to the api router`);
 });
 
 // General API Routes
-router.use(`/users`, require(`./users`));
+// router.use(`/users`, require(`./users`));
 
 // Hockey Specific Routes
 router.use(`/hockey/agegroup`, require(`./hockey/agegroup`));
