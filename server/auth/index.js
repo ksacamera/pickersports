@@ -40,10 +40,10 @@ router.post("/signIn", async (req, res) => {
   });
 
   if (user) {
-    const passwordMatch = await bcrypt.compare(password, user.password); 
-          // ⇑ Will return true if password is correct
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    // ⇑ Will return true if password is correct
     if (passwordMatch) {
-      const token = jwt.sign({id: user.id}, process.env.JWT) // Uses .env package 
+      const token = jwt.sign({ id: user.id }, process.env.JWT); // Uses .env package
       res.send({ token });
     } else {
       res.send({ message: "Invalid Login" });
@@ -53,28 +53,49 @@ router.post("/signIn", async (req, res) => {
   }
 });
 
-// Route that sends the user according to given token
+//Route that sends the user based on the given token
 router.get("/me", async (req, res) => {
-  // Check whether aut header is valid
-  const auth = req.headers.authorizations;
+//Checks the request for the userId which
+//was set by our middleware in server/index.js
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: req.userId },
+    });
 
-  const token = auth?.startsWith("Bearer ") ? auth.slice(7) : null;
-    // ⇑  "?" means that this will only activate if auth exists.
-          //  auth.slice cleans up the result.
-        
-    try { 
-      const { id } = jwt.verify(token, process.env.JWT);
-      const user = await prisma.user.findUnique({
-        where:{id : id}
-      })
-
-      if(user) {
-        res.send(user);
-      } else {
-        res.send({ message: "User Not Found" });
+    if (user) {
+      res.send(user);
+    } else {
+      res.send({ message: "User Not Found" });
     }
   } catch (error) {
-    res.send(error.message);
+    res.send({message: error.message});
+  }
+});
+
+// ROUTE TO DELETE USER (ADMIN REQUIRED)
+router.delete("/delete/:userId", async (req, res) => {
+  try {
+    const userId = parseInt(req.params.userId);
+    if (!req.user.isAdmin) {
+      return res
+        .status(403)
+        .send({ message: "Unauthorized access. Admin privileges required." });
+    }
+
+    const result = await prisma.user.delete({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (result) {
+      res.status(200).send({ message: "User deleted successfully" });
+    } else {
+      res.status(404).send({ message: "User not found" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Internal server error" });
   }
 });
 
