@@ -1,6 +1,8 @@
 const express = require("express");
 const router = require("express").Router();
 const { PrismaClient } = require("@prisma/client");
+const { requireUser } = require("../utils"); 
+const { requireAdmin } = require("../utils");
 
 // Initialize Prisma client
 const prisma = new PrismaClient();
@@ -17,7 +19,7 @@ router.get("/", async (req, res) => {
 });
 
 // Returns ONE hand with specified ID
-router.get("/:id", async (req, res) => {
+router.get("/:id", requireUser, async (req, res) => {
   try {
     const hand = await prisma.hand.findUnique({
       where: {
@@ -35,7 +37,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // Define a route to create a new hand
-router.post("/", async (req, res) => {
+router.post("/", requireAdmin, async (req, res) => {
   try {
     // Extract hand data from the request body
     const { HandName } = req.body;
@@ -55,7 +57,7 @@ router.post("/", async (req, res) => {
 });
 
 //Updates hand with specified id
-router.put("/:id", async (req, res) => {
+router.put("/:id", requireAdmin, async (req, res) => {
   try {
     const hand = await prisma.hand.update({
       where: {
@@ -74,7 +76,7 @@ router.put("/:id", async (req, res) => {
 });
 
 // Route that deletes a Hand
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", requireAdmin, async (req, res) => {
   try {
     const deletedHand = await prisma.hand.delete({
       where: {

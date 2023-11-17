@@ -1,5 +1,5 @@
 const requireUser  = (req, res, next) =>{
-  //if user is logged is pass them through
+  //if user is logged in pass them through
   if(req.userId){
     next();
   }
@@ -8,17 +8,22 @@ const requireUser  = (req, res, next) =>{
   }
 }
 
-export function getAuthHeader() {
-  const token = localStorage.getItem('token');
-  if (token) {
-    return { 'Authorization': `Bearer ${token}` };
+const requireAdmin = (req, res, next) => {
+  // Check if user is logged in as an admin
+  if (req.userId && req.isAdmin) {
+    next();
   } else {
-    return {};
+    res.status(401).send({ message: "Admin unauthorized" });
   }
 }
 
+const getAuthHeader = () => {
+  const token = localStorage.getItem('token');
+  return token ? { 'Authorization': `Bearer ${token}` } : {};
+};
 
 module.exports = {
   requireUser,
-  getAuthHeader
+  getAuthHeader,
+  requireAdmin
 }

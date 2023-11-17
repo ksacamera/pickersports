@@ -1,12 +1,14 @@
 const express = require("express");
 const router = require("express").Router();
 const { PrismaClient } = require("@prisma/client");
+const { requireUser } = require("./utils"); 
+const { requireAdmin } = require("./utils");
 
 // Initialize Prisma client
 const prisma = new PrismaClient();
 
 // Route to fetch users
-router.get('/', async (req, res) => {
+router.get('/', requireAdmin, async (req, res) => {
   try {
     const users = await prisma.user.findMany();
     res.send(users);
@@ -17,7 +19,7 @@ router.get('/', async (req, res) => {
 });
 
 // Returns ONE User with specified ID
-router.get("/:id", async (req, res) => {
+router.get("/:id", requireAdmin, async (req, res) => {
   try{
   const user = await prisma.user.findUnique({
     where: {
@@ -55,7 +57,7 @@ router.post('/', async (req, res) => {
 });
 
 //Updates user with specified id
-router.put("/:id", async (req, res) => {
+router.put("/:id", requireUser, async (req, res) => {
   try {
     const user = await prisma.user.update({
       where: {
@@ -74,7 +76,7 @@ router.put("/:id", async (req, res) => {
 });
 
 // Route that deletes a User
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", requireAdmin, async (req, res) => {
   try {
     const deletedUser = await prisma.user.delete({
       where: {

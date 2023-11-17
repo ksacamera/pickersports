@@ -1,6 +1,8 @@
 const express = require("express");
 const router = require("express").Router();
 const { PrismaClient } = require("@prisma/client");
+const { requireUser } = require("../utils"); 
+const { requireAdmin } = require("../utils");
 
 // Initialize Prisma client
 const prisma = new PrismaClient();
@@ -19,7 +21,7 @@ router.get("/", async (req, res) => {
 });
 
 // Returns ONE Texture with specified ID
-router.get("/:id", async (req, res) => {
+router.get("/:id", requireUser, async (req, res) => {
   try {
     const texture = await prisma.texture.findUnique({
       where: {
@@ -37,7 +39,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // Define a route to create a new Texture
-router.post("/", async (req, res) => {
+router.post("/", requireAdmin, async (req, res) => {
   try {
     // Extract texture data from the request body
     const { TextureName } = req.body;
@@ -59,7 +61,7 @@ router.post("/", async (req, res) => {
 });
 
 //Updates texture with specified id
-router.put("/:id", async (req, res) => {
+router.put("/:id", requireAdmin, async (req, res) => {
   try {
     const texture = await prisma.texture.update({
       where: {
@@ -78,7 +80,7 @@ router.put("/:id", async (req, res) => {
 });
 
 // Route that deletes a Texture
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", requireAdmin, async (req, res) => {
   try {
     const deletedTexture = await prisma.texture.delete({
       where: {
