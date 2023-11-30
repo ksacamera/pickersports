@@ -1,6 +1,8 @@
 const express = require("express");
 const router = require("express").Router();
 const { PrismaClient } = require("@prisma/client");
+const { requireUser } = require("../utils"); 
+const { requireAdmin } = require("../utils");
 
 // Initialize Prisma client
 const prisma = new PrismaClient();
@@ -17,7 +19,7 @@ router.get("/", async (req, res) => {
 });
 
 // Returns ONE Brand with specified ID
-router.get("/:id", async (req, res) => {
+router.get("/:id", requireUser, async (req, res) => {
   try {
     const brand = await prisma.brand.findUnique({
       where: {
@@ -35,7 +37,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // Define a route to create a new brand
-router.post("/", async (req, res) => {
+router.post("/", requireAdmin, async (req, res) => {
   try {
     // Extract brand data from the request body
     const { BrandName } = req.body;
@@ -57,7 +59,7 @@ router.post("/", async (req, res) => {
 });
 
 //Updates brand with specified id
-router.put("/:id", async (req, res) => {
+router.put("/:id", requireAdmin, async (req, res) => {
   try {
     const brand = await prisma.brand.update({
       where: {
@@ -76,7 +78,7 @@ router.put("/:id", async (req, res) => {
 });
 
 // Route that deletes a Brand
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", requireAdmin, async (req, res) => {
   try {
     const deletedBrand = await prisma.brand.delete({
       where: {

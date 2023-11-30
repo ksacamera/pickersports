@@ -1,6 +1,8 @@
 const express = require("express");
 const router = require("express").Router();
 const { PrismaClient } = require("@prisma/client");
+const { requireUser } = require("../utils"); 
+const { requireAdmin } = require("../utils");
 
 // Initialize Prisma client
 const prisma = new PrismaClient();
@@ -19,7 +21,7 @@ router.get("/", async (req, res) => {
 });
 
 // Returns ONE Stick Model with specified ID
-router.get("/:id", async (req, res) => {
+router.get("/:id", requireUser, async (req, res) => {
   try {
     const stickModel = await prisma.model.findUnique({
       where: {
@@ -37,7 +39,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // Define a route to create a new Stick Model
-router.post("/", async (req, res) => {
+router.post("/", requireAdmin, async (req, res) => {
   try {
     // Extract Stick Model data from the request body
     const { ModelName } = req.body;
@@ -59,7 +61,7 @@ router.post("/", async (req, res) => {
 });
 
 //Updates stick model with specified id
-router.put("/:id", async (req, res) => {
+router.put("/:id", requireAdmin, async (req, res) => {
   try {
     const stickModel = await prisma.model.update({
       where: {
@@ -78,7 +80,7 @@ router.put("/:id", async (req, res) => {
 });
 
 // Route that deletes a stick model
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", requireAdmin, async (req, res) => {
   try {
     const deletedStickModel = await prisma.model.delete({
       where: {

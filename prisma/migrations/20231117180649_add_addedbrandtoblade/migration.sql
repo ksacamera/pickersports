@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "BladeCurve" ADD COLUMN     "BrandID" INTEGER NOT NULL DEFAULT 1;
+
+-- AddForeignKey
+ALTER TABLE "BladeCurve" ADD CONSTRAINT "BladeCurve_BrandID_fkey" FOREIGN KEY ("BrandID") REFERENCES "Brand"("BrandID") ON DELETE RESTRICT ON UPDATE CASCADE;
