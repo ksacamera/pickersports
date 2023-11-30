@@ -7,10 +7,6 @@ const { requireAdmin } = require("../utils");
 // Initialize Prisma client
 const prisma = new PrismaClient();
 
-router.get("/", async (req, res) => {
-  res.send("Blade/Curve routes working")
-})
-
 // Define a route to fetch all blade curves
 router.get("/", async (req, res) => {
   try {
